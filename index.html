@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location Submission</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 5%;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .btn {
+        position: relative;
+        left: 50%;
+      }
+
+      .btn1 {
+        position: relative;
+        left: 45%;
+      }
+
+      #map {
+        height: 400px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      #locationInfo {
+        margin-top: 20px;
+      }
+
+      #textInput {
+        margin-top: 10px;
+        width: 50%;
+        padding: 5px;
+        text-align: center;
+        position: relative;
+        left: 25%;
+      }
+
+      p {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Location Submission</h1>
+
+    <button onclick="getCurrentLocation()" class="btn">
+      <img
+        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ficon-library.com%2Fimages%2Fcurrent-location-icon%2Fcurrent-location-icon-8.jpg&f=1&nofb=1&ipt=2d3634832ee98b0deb61fb13c9e0d13b74ab2ea0d6b380b3d3519fabc2289366&ipo=images"
+        width="20px"
+        alt=""
+      />
+    </button>
+
+    <div id="map"></div>
+
+    <div id="locationInfo">
+      <p><strong>Latitude:</strong> <span id="latitude"></span></p>
+      <p><strong>Longitude:</strong> <span id="longitude"></span></p>
+      <input
+        type="text"
+        id="textInput"
+        placeholder="Enter something..."
+        width="20px "
+      />
+    </div>
+    <br />
+    <button onclick="submitLocation()" class="btn1">Submit</button>
+
+    <script>
+      let latitude;
+      let longitude;
+
+      function getCurrentLocation() {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            function (position) {
+              latitude = position.coords.latitude;
+              longitude = position.coords.longitude;
+
+              // Display the location on the map
+              showLocationOnMap(latitude, longitude);
+
+              // Display location information
+              document.getElementById("latitude").textContent = latitude;
+              document.getElementById("longitude").textContent = longitude;
+            },
+            function (error) {
+              console.error("Error getting geolocation:", error.message);
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by your browser");
+        }
+      }
+
+      function showLocationOnMap(latitude, longitude) {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: latitude, lng: longitude },
+          zoom: 15,
+        });
+
+        const marker = new google.maps.Marker({
+          position: { lat: latitude, lng: longitude },
+          map: map,
+          title: "Current Location",
+        });
+      }
+
+      function submitLocation() {
+        const textInputValue = document.getElementById("textInput").value;
+
+        // Redirect to another page with parameters in the URL
+        const url = `submit/submitPage.html?lat=${latitude}&lng=${longitude}&textInput=${encodeURIComponent(
+          textInputValue
+        )}`;
+        window.location.href = url;
+      }
+    </script>
+  </body>
+</html>

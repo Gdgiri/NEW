@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submitted Location Details</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      #map {
+        height: 400px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      #locationInfo {
+        margin-top: 20px;
+      }
+
+      p {
+        margin: 10px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Submitted Location Details</h1>
+
+    <div id="map"></div>
+
+    <div id="locationInfo">
+      <p><strong>Latitude:</strong> <span id="latitude"></span></p>
+      <p><strong>Longitude:</strong> <span id="longitude"></span></p>
+      <p><strong>Incident:</strong> <span id="textInput"></span></p>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const latitude = urlParams.get("lat");
+      const longitude = urlParams.get("lng");
+      const textInput = decodeURIComponent(urlParams.get("textInput"));
+
+      document.getElementById("latitude").textContent = latitude;
+      document.getElementById("longitude").textContent = longitude;
+      document.getElementById("textInput").textContent = textInput;
+
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+        zoom: 15,
+      });
+
+      const marker = new google.maps.Marker({
+        position: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+        map: map,
+        title: "Submitted Location",
+      });
+    </script>
+  </body>
+</html>
